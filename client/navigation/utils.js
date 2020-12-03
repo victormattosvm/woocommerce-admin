@@ -79,9 +79,18 @@ export const getMatchScore = ( location, url ) => {
 		return Number.MAX_SAFE_INTEGER - 2;
 	}
 
+	// Taxonomy match.
+	const locationParams = getParams( location );
+	if (
+		locationParams.taxonomy === urlParams.taxonomy &&
+		urlPathname.indexOf( 'edit-tags.php' ) >= 0 &&
+		origin === urlOrigin
+	) {
+		return Number.MAX_SAFE_INTEGER - 2;
+	}
+
 	// Add points for each matching param.
 	let matchingParamCount = 0;
-	const locationParams = getParams( location );
 	Object.keys( urlParams ).forEach( ( key ) => {
 		if ( urlParams[ key ] === locationParams[ key ] ) {
 			matchingParamCount++;
