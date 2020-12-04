@@ -35,7 +35,7 @@ export class TaskDashboard extends Component {
 
 	trackStartedTask = ( taskName ) => {
 		const { trackedStartedTasks, updateOptions } = this.props;
-		const taskStarted = trackedStartedTasks.filter(
+		const taskStarted = ( trackedStartedTasks || [] ).filter(
 			( task ) => task === taskName
 		);
 		if ( taskStarted.length > 1 ) {
@@ -43,7 +43,7 @@ export class TaskDashboard extends Component {
 		}
 		updateOptions( {
 			woocommerce_task_list_tracked_started_tasks: [
-				...trackedStartedTasks,
+				...( trackedStartedTasks || [] ),
 				taskName,
 			],
 		} );
@@ -124,25 +124,25 @@ export class TaskDashboard extends Component {
 				{ setupTasks && ! isSetupTaskListHidden && (
 					<TaskList
 						allTasks={ allTasks }
-						dismissedTasks={ dismissedTasks }
+						dismissedTasks={ dismissedTasks || [] }
 						isTaskListComplete={ isTaskListComplete }
 						isExtended={ false }
 						query={ query }
 						specificTasks={ setupTasks }
-						trackedCompletedTasks={ trackedCompletedTasks }
+						trackedCompletedTasks={ trackedCompletedTasks || [] }
 					/>
 				) }
 				{ extensionTasks && ! isExtendedTaskListHidden && (
 					<TaskList
 						allTasks={ allTasks }
-						dismissedTasks={ dismissedTasks }
+						dismissedTasks={ dismissedTasks || [] }
 						isExtendedTaskListComplete={
 							isExtendedTaskListComplete
 						}
 						isExtended={ true }
 						query={ query }
 						specificTasks={ extensionTasks }
-						trackedCompletedTasks={ trackedCompletedTasks }
+						trackedCompletedTasks={ trackedCompletedTasks || [] }
 					/>
 				) }
 				{ isCartModalOpen && (
@@ -170,10 +170,12 @@ export default compose(
 		} = select( PLUGINS_STORE_NAME );
 		const profileItems = getProfileItems();
 
-		const trackedCompletedTasks =
-			getOption( 'woocommerce_task_list_tracked_completed_tasks' ) || [];
-		const trackedStartedTasks =
-			getOption( 'woocommerce_task_list_tracked_started_tasks' ) || [];
+		const trackedCompletedTasks = getOption(
+			'woocommerce_task_list_tracked_completed_tasks'
+		);
+		const trackedStartedTasks = getOption(
+			'woocommerce_task_list_tracked_started_tasks'
+		);
 
 		const { general: generalSettings = {} } = getSettings( 'general' );
 		const countryCode = getCountryCode(
@@ -187,8 +189,9 @@ export default compose(
 		return {
 			activePlugins,
 			countryCode,
-			dismissedTasks:
-				getOption( 'woocommerce_task_list_dismissed_tasks' ) || [],
+			dismissedTasks: getOption(
+				'woocommerce_task_list_dismissed_tasks'
+			),
 			isExtendedTaskListComplete:
 				getOption( 'woocommerce_extended_task_list_complete' ) ===
 				'yes',
@@ -202,18 +205,17 @@ export default compose(
 			installedPlugins,
 			onboardingStatus,
 			profileItems,
-			trackedCompletedTasks:
-				getOption( 'woocommerce_task_list_tracked_completed_tasks' ) ||
-				[],
 			trackedCompletedTasks,
 			trackedStartedTasks,
 		};
 	} ),
 	withDispatch( ( dispatch ) => {
 		const { createNotice } = dispatch( 'core/notices' );
+		const { updateOptions } = dispatch( OPTIONS_STORE_NAME );
 		const { installAndActivatePlugins } = dispatch( PLUGINS_STORE_NAME );
 
 		return {
+			updateOptions,
 			createNotice,
 			installAndActivatePlugins,
 		};
