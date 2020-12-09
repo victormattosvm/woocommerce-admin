@@ -1,7 +1,11 @@
 # Unreleased
 
--   Change styling of `<ProductImage />`
+-   Change styling of `<ProductImage />`.
 -   Add new `<Accordion>` component.
+-   Support custom attributes in `<AttributeFilter />`.
+-   Add product attributes support to `<Search />`.
+-   Allow single-selection support to `<Search />`.
+-   Improve handling of `multiple` and `inlineTags` in `<SelectControl />`.
 
 # 5.1.2
 

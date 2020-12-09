@@ -71,6 +71,10 @@ Release and roadmap notes are available on the [WooCommerce Developers Blog](htt
 
 == Changelog ==
 
+== Unreleased ==
+
+- Fix: support custom attributes in Attribute advanced report filter.
+
 = 1.7.0 11/11/2020 =
 
 - Enhancement: Variations report.  #5167
